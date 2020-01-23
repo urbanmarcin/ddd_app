@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
   mount RailsEventStore::Browser => '/res' if Rails.env.development?
 
-  post 'create_draft',to: 'posting#create_draft'
+  resources :posts do
+    post 'created_draft'
+    patch 'update_text', on: :member
+    post 'publish_post', on: :member
+  end
+
+  get '/published' => 'posts#published'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

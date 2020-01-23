@@ -10,15 +10,11 @@ Rails.configuration.to_prepare do
     config.default_event_store = Rails.configuration.event_store
   end
 
-  class InvoiceReadModel
-    def call(event)
-
-    end
-  end
-
   # Subscribe event handlers below
   Rails.configuration.event_store.tap do |store|
-    store.subscribe(InvoiceReadModel.new, to: [InvoicePrinted])
+    store.subscribe(Posts::OnDraftCreated, to: [Posting::DraftCreated])
+    store.subscribe(Posts::OnPostRemoved, to: [Posting::PostRemoved])
+    store.subscribe(Posts::OnPostPublished, to: [Posting::PostPublished])
   #   store.subscribe(->(event) { SendOrderConfirmation.new.call(event) }, to: [OrderSubmitted])
   #   store.subscribe_to_all_events(->(event) { Rails.logger.info(event.type) })
   end
@@ -26,7 +22,9 @@ Rails.configuration.to_prepare do
   # Register command handlers below
   Rails.configuration.command_bus.tap do |bus|
     bus.register(Posting::CreateDraft, ->(cmd) { Posting::OnCreateDraft.new.call(cmd) })
-
+    bus.register(Posting::UpdateText, ->(cmd) { Posting::OnUpdateText.new.call(cmd) })
+    bus.register(Posting::RemovePost, ->(cmd) { Posting::OnRemovePost.new.call(cmd) })
+    bus.register(Posting::PublishPost, ->(cmd) { Posting::OnPublishPost.new.call(cmd) })
     #bus.register(PrintInvoice, Invoicing::OnPrint.new)
     #bus.register(SubmitOrder,  ->(cmd) { Ordering::OnSubmitOrder.new.call(cmd) })
   end

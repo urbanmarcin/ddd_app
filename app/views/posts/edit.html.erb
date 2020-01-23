@@ -1,0 +1,21 @@
+
+<%= form_for @post, as: :post, url: "/posts/#{@post.id}/update_text", method: :patch, html: { class: "edit_post" } do |form| %>
+
+<p>
+  <%= form.label :title %><br>
+  <%= form.text_field :title %>
+</p>
+<p>
+  <%= form.label :title_max_length %><br>
+  <%= form.text_field :title_max_length %>
+</p>
+  <p>
+    <%= form.label :description %><br>
+    <%= form.text_area :description %>
+  </p>
+    <% form.hidden_field :uid, value: @uid %>
+
+  <p>
+    <%= form.submit %>
+  </p>
+<% end %>

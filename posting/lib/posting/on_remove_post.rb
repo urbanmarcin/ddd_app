@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Posting
-  class OnCreateDraft
+  class OnRemovePost
     include Aggregate
 
     def call(command)
@@ -9,11 +9,7 @@ module Posting
       aggregate_id = command.aggregate_id
 
       with_aggregate(aggregate_class, aggregate_id) do |aggregate|
-        aggregate.create_draft(
-          command.title,
-          command.description,
-          command.title_max_length
-        )
+        aggregate.remove_post
       end
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Posting
-  class OnCreateDraft
+  class OnUpdateText
     include Aggregate
 
     def call(command)

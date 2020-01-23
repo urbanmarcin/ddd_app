@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191226083218) do
+ActiveRecord::Schema.define(version: 20200123073919) do
 
   create_table "event_store_events", id: false, force: :cascade do |t|
     t.string   "id",         limit: 36
@@ -35,5 +35,15 @@ ActiveRecord::Schema.define(version: 20191226083218) do
   add_index "event_store_events_in_streams", ["created_at"], name: "index_event_store_events_in_streams_on_created_at"
   add_index "event_store_events_in_streams", ["stream", "event_id"], name: "index_event_store_events_in_streams_on_stream_and_event_id", unique: true
   add_index "event_store_events_in_streams", ["stream", "position"], name: "index_event_store_events_in_streams_on_stream_and_position", unique: true
+
+  create_table "posts", force: :cascade do |t|
+    t.string   "title"
+    t.text     "description"
+    t.string   "uid"
+    t.string   "state"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "title_max_length"
+  end
 
 end

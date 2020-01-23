@@ -1,27 +1,53 @@
+# frozen_string_literal: true
+
 module Posting
   class Post
-
     include AggregateRoot
     TitleInvalid = Class.new(StandardError)
-
-
-    # states :draft, published, removed
+    AlreadyPublished = Class.new(StandardError)
 
     def initialize(id)
-      @id = id   #command.uid
+      @id = id
       @state = :draft
     end
 
-    def create_draft(title, description, uid)
-      raise TitleInvalid if title.blank?
+    def create_draft(title, description, title_max_length)
+      raise TitleInvalid, 'Title is empty' if title.blank?
+      apply DraftCreated.new(
+        data:
+          {
+            uid: @id,
+            title: title,
+            description: description,
+            title_max_length: title_max_length
+          }
+      )
+    end
 
-      apply DraftCreated.new(data: {id: @id, uid: @id, title: title, description: description})
+    def remove_post
+      apply PostRemoved.new(data: { uid: @id })
+    end
+
+    def publish_post
+      raise AlreadyPublished if @state == :published
+
+      apply PostPublished.new(data: { uid: @id })
+    end
+
+    on PostRemoved do |_|
+      @state = :removed
     end
 
     on DraftCreated do |event|
-      @title = event.data[:title]
+      @title = Posting::Title.new(
+        event.data[:title],
+        event.data[:title_max_length]
+      )
       @description = event.data[:description]
     end
 
+    on PostPublished do |_|
+      @state = :published
+    end
   end
 end

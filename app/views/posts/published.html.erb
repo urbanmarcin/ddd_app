@@ -1,0 +1,27 @@
+<% if flash[:notice] %>
+    <div class="notice"><%= flash[:notice] %></div>
+<% end %>
+
+<h1>Listing Posts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Content</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td><%= post.title_with_length %></td>
+        <td><%= post.description %></td>
+        <td><%= link_to "Show", post_path(post) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
