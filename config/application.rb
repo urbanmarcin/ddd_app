@@ -23,6 +23,8 @@ module AppDdd
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.paths.add 'lib', eager_load: true
     config.paths.add 'posting/lib', eager_load: true
+    config.paths.add 'approving/lib', eager_load: true
+    config.autoload_paths << Rails.root.join('app/services')
 
     config.active_record.raise_in_transactional_callbacks = true
   end

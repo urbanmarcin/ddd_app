@@ -21,8 +21,10 @@ class PostsController < ApplicationController
   end
 
   def update_text
+    @post = Posts::Post.find(params[:id])
+
     cmd = Posting::UpdateText.new(
-      uid: params[:id],
+      uid: @post.uid,
       title: params[:post][:title],
       description: params[:post][:description],
       title_max_length: params[:post][:title_max_length]
@@ -57,6 +59,9 @@ class PostsController < ApplicationController
     redirect_to '/published'
   rescue Posting::Post::AlreadyPublished => e
     flash[:error] = 'Already Published'
+    redirect_to '/posts'
+  rescue Posting::Post::NotApproved => e
+    flash[:error] = 'Cannot Publish. Post needs to be approved by 3 people.'
     redirect_to '/posts'
   end
 

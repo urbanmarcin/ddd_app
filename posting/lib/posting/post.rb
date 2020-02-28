@@ -5,6 +5,8 @@ module Posting
     include AggregateRoot
     TitleInvalid = Class.new(StandardError)
     AlreadyPublished = Class.new(StandardError)
+    NotApproved = Class.new(StandardError)
+    AlreadyApproved = Class.new(StandardError)
 
     def initialize(id)
       @id = id
@@ -13,6 +15,7 @@ module Posting
 
     def create_draft(title, description, title_max_length)
       raise TitleInvalid, 'Title is empty' if title.blank?
+
       apply DraftCreated.new(
         data:
           {
@@ -30,8 +33,20 @@ module Posting
 
     def publish_post
       raise AlreadyPublished if @state == :published
+      raise NotApproved if @state != :approved
 
       apply PostPublished.new(data: { uid: @id })
+    end
+
+    def mark_as_approved
+      raise AlreadyPublished if @state == :published
+      raise AlreadyApproved if @state == :approved
+
+      apply PostMarkedAsApproved.new(data: { uid: @id })
+    end
+
+    on PostMarkedAsApproved do |_|
+      @state = :approved
     end
 
     on PostRemoved do |_|

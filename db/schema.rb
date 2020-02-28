@@ -11,11 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200123073919) do
+ActiveRecord::Schema.define(version: 20200229074553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
+
+  create_table "approvals", force: :cascade do |t|
+    t.string   "approved_by"
+    t.string   "post_uid"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "capturing_saga_states", force: :cascade do |t|
+    t.string "post_uid"
+    t.jsonb  "data"
+  end
+
+  add_index "capturing_saga_states", ["post_uid"], name: "index_capturing_saga_states_on_post_uid", unique: true, using: :btree
 
   create_table "event_store_events", id: :uuid, default: "gen_random_uuid()", force: :cascade do |t|
     t.string   "event_type", null: false

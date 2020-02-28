@@ -7,6 +7,11 @@ Rails.application.routes.draw do
     post 'publish_post', on: :member
   end
 
+  resources :approvals do
+
+  end
+
+  post '/posts/:post_id/approve_post' => 'approvals#approve_post'
   get '/published' => 'posts#published'
 
   # The priority is based upon order of creation: first created -> highest priority.

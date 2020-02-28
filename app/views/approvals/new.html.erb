@@ -1,0 +1,13 @@
+<% if flash[:error] %>
+  <div class="error"><%= flash[:error] %></div>
+<% end %>
+
+<%= form_for @approval, as: :approval, url: "/posts/#{@post.uid}/approve_post", method: :post do |form| %>
+  <p>
+    <%= form.label :approved_by %><br>
+    <%= form.text_field :approved_by %>
+  </p>
+  <p>
+    <%= form.submit %>
+  </p>
+<% end %>
