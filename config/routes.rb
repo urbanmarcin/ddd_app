@@ -14,6 +14,13 @@ Rails.application.routes.draw do
   post '/posts/:post_id/approve_post' => 'approvals#approve_post'
   get '/published' => 'posts#published'
 
+  # class CanSeeResEvents
+  #   def matches?(request)
+  #     request.headers["HTTP_RES_API_KEY"] == ENV['DRES_API_KEY']
+  #   end
+  # end
+  mount DresRails::Engine => "/res_events" #, constraints: CanSeeResEvents
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

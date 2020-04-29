@@ -19,17 +19,17 @@ ActiveRecord::Schema.define(version: 20200229074553) do
 
   create_table "approvals", force: :cascade do |t|
     t.string   "approved_by"
-    t.string   "post_uid"
+    t.integer  "post_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
 
   create_table "capturing_saga_states", force: :cascade do |t|
-    t.string "post_uid"
-    t.jsonb  "data"
+    t.integer "order_id"
+    t.jsonb   "data"
   end
 
-  add_index "capturing_saga_states", ["post_uid"], name: "index_capturing_saga_states_on_post_uid", unique: true, using: :btree
+  add_index "capturing_saga_states", ["order_id"], name: "index_capturing_saga_states_on_order_id", unique: true, using: :btree
 
   create_table "event_store_events", id: :uuid, default: "gen_random_uuid()", force: :cascade do |t|
     t.string   "event_type", null: false
