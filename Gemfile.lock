@@ -1,5 +1,5 @@
 PATH
-  remote: ../dres_rails
+  remote: dres_rails
   specs:
     dres_rails (0.6.0)
       rails (>= 4.2, < 6)
